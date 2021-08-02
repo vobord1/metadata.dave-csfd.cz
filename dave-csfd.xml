@@ -11,10 +11,6 @@
     <CreateSearchUrl clearbuffers="no" dest="8">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
         <RegExp input="$$1" output="&lt;url&gt;https://www.csfd.cz/hledat/?q=\1|$$10&lt;/url&gt;" dest="8">
-            <RegExp input="$$2" output="+\1" dest="1+">
-                <expression>(\d+)</expression>
-            </RegExp>
-            <expression noclean="1"/>
         </RegExp>
     </CreateSearchUrl>
 
