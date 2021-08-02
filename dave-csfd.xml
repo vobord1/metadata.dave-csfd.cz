@@ -3,15 +3,21 @@
 
     <NfoUrl dest="3">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
-        <RegExp input="$$1" output="&lt;url gzip=&quot;yes&quot; cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/film/\1/galerie/plakaty/|$$10&lt;/url&gt;&lt;id&gt;\1&lt;/id&gt;" dest="3">
+        <RegExp input="$$1" output="&lt;url&gt;https://www.csfd.cz/film/\1/galerie/plakaty/|$$10&lt;/url&gt;&lt;id&gt;\1&lt;/id&gt;" dest="3">
             <expression>https?://(?:www\.)?csfd\.cz/film/(\d+-.*?)/</expression>
         </RegExp>
     </NfoUrl>
-    <CreateSearchUrl clearbuffers="no" dest="2">
+
+    <CreateSearchUrl clearbuffers="no" dest="8">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
-        <RegExp input="$$1" output="&lt;url cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/hledat/?q=\1|$$10&lt;/url&gt;" dest="2">
+        <RegExp input="$$1" output="&lt;url&gt;https://www.csfd.cz/hledat/?q=\1|$$10&lt;/url&gt;" dest="8">
+            <RegExp input="$$2" output="+\1" dest="1+">
+                <expression>(\d+)</expression>
+            </RegExp>
+            <expression noclean="1"/>
         </RegExp>
     </CreateSearchUrl>
+
     <!--
         &amp; → &
         &lt; → <
@@ -33,9 +39,9 @@
          </entity>
        </results>
     -->
-    <GetSearchResults clearbuffers="no" dest="4">
-        <RegExp input="$$3" output="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;results sorted=&quot;yes&quot;&gt;\1&lt;/results&gt;" dest="4">
-            <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/film/\1/galerie/plakaty/&lt;/url&gt;&lt;/entity&gt;" dest="3">
+    <GetSearchResults clearbuffers="no" dest="8">
+        <RegExp input="$$3" output="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;results sorted=&quot;yes&quot;&gt;\1&lt;/results&gt;" dest="8">
+            <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;https://www.csfd.cz/film/\1/galerie/plakaty/|$$10&lt;/url&gt;&lt;/entity&gt;" dest="3">
                 <!--
                  <a href="/film/241061-auta-2/" class="film-title-name">Auta 2</a>
                  capture 1 = '241061-auta-2'
@@ -45,7 +51,6 @@
             </RegExp>
             <expression noclean="1" />
         </RegExp>
-        <expression noclean="4" />
     </GetSearchResults>
 
     <!--
@@ -74,26 +79,26 @@
    -->
     <GetDetails clearbuffers="no" dest="8">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
-        <RegExp input="$$6" output="&lt;details>\1&lt;/details>" dest="8">
+        <RegExp input="$$6" output="&lt;details&gt;\1&lt;/details&gt;" dest="8">
 
             <!-- Title !-->
             <RegExp input="$$1" output="&lt;title>\1&lt;/title>" dest="6">
-                <expression trim="1" noclean="1">&lt;h1 itemprop=&quot;name&quot;>(.[^&lt;]*)&lt;/h1></expression>
+                <expression trim="1" noclean="1">&lt;h1 itemprop=&quot;name&quot;&gt;(.[^&lt;]*)&lt;/h1&gt;</expression>
             </RegExp>
             <!-- Original Title !-->
-            <RegExp input="$$1" output="&lt;originaltitle>\4&lt;/originaltitle>" dest="6+">
-                <expression trim="4">&lt;ul class="film-names">(.[^&lt;]*)&lt;li(.[^&lt;]*)&lt;img(.[^>]*)>(.[^&lt;]*)</expression>
+            <RegExp input="$$1" output="&lt;originaltitle&gt;\4&lt;/originaltitle&gt;" dest="6+">
+                <expression trim="4">&lt;ul class="film-names"&gt;(.[^&lt;]*)&lt;li(.[^&lt;]*)&lt;img(.[^&gt;]*)&gt;(.[^&lt;]*)</expression>
             </RegExp>
             <!-- Year !-->
-            <RegExp input="$$1" output="&lt;year>\1&lt;/year>" dest="6+">
-                <expression trim="1">&lt;span itemprop="dateCreated">(.[^&lt;]*)&lt;/span></expression>
+            <RegExp input="$$1" output="&lt;year&gt;\1&lt;/year&gt;" dest="6+">
+                <expression trim="1">&lt;span itemprop="dateCreated"&gt;(.[^&lt;]*)&lt;/span&gt;</expression>
             </RegExp>
             <!-- Directors !-->
-            <RegExp input="$$7" output="&lt;director>\2&lt;/director>" dest="6+">
+            <RegExp input="$$7" output="&lt;director&gt;\2&lt;/director&gt;" dest="6+">
                 <RegExp input="$$1" output="\1" dest="7">
-                    <expression noclean="1" trim="1">(&lt;span itemprop="director">((.[^&lt;]*)&lt;a(.[^>]*)>(.[^&lt;]*)&lt;/a>(.[^&lt;]*))*&lt;/span>)</expression>
+                    <expression noclean="1" trim="1">(&lt;span itemprop="director"&gt;((.[^&lt;]*)&lt;a(.[^&gt;]*)&gt;(.[^&lt;]*)&lt;/a&gt;(.[^&lt;]*))*&lt;/span&gt;)</expression>
                 </RegExp>
-                <expression repeat="yes" trim="2">&lt;a(.[^>]*)>(.[^&lt;]*)</expression>
+                <expression repeat="yes" trim="2">&lt;a(.[^&gt;]*)&gt;(.[^&lt;]*)</expression>
             </RegExp>
             <!-- Thumbnail !-->
 <!--
@@ -102,19 +107,19 @@
             </RegExp>
 -->
             <!-- Thumbnail2 !-->
-            <RegExp input="$$1" output="&lt;thumb&gt;https:\5&lt;/thumb&gt;" dest="6+">
+            <RegExp input="$$1" output="&lt;thumb&gt;https:\5|$$10&lt;/thumb&gt;" dest="6+">
                 <expression>&lt;picture&gt;((.[^&lt;]*)&lt;source(.[^&gt;]*)&gt;)*(.[^&lt;]*)&lt;img src=&quot;(.[^&quot;]*)&quot;</expression>
             </RegExp>
             <!-- Rating !-->
-            <RegExp input="$$1" output="&lt;rating max=&quot;100&quot;>\1&lt;/rating>" dest="6+">
-                <expression trim="1">&lt;div class="rating-average">([0-9]+)%&lt;/div></expression>
+            <RegExp input="$$1" output="&lt;rating max=&quot;100&quot;&gt;\1&lt;/rating&gt;" dest="6+">
+                <expression trim="1">&lt;div class="rating-average"&gt;([0-9]+)%&lt;/div&gt;</expression>
             </RegExp>
             <!-- Actors !-->
-            <RegExp input="$$7" output="&lt;actor>&lt;name>\2&lt;/name>&lt;/actor>" dest="6+">
+            <RegExp input="$$7" output="&lt;actor&gt;&lt;name&gt;\2&lt;/name&gt;&lt;/actor&gt;" dest="6+">
                 <RegExp input="$$1" output="\2" dest="7">
-                    <expression trim="1" noclean="2">&lt;h4>Hrají: &lt;/h4>(.[^&lt;]*)(&lt;span(.[^>]*)>((.[^&lt;]*)&lt;a(.[^>]*)>(.[^&lt;]*)&lt;/a>(.[^&lt;]*))*&lt;/span>)</expression>
+                    <expression trim="1" noclean="2">&lt;h4&gt;Hrají: &lt;/h4&gt;(.[^&lt;]*)(&lt;span(.[^&gt;]*)&gt;((.[^&lt;]*)&lt;a(.[^&gt;]*)&gt;(.[^&lt;]*)&lt;/a&gt;(.[^&lt;]*))*&lt;/span&gt;)</expression>
                 </RegExp>
-                <expression repeat="yes" trim="2">&lt;a(.[^>]*)>(.[^&lt;]*)</expression>
+                <expression repeat="yes" trim="2">&lt;a(.[^&gt;]*)&gt;(.[^&lt;]*)</expression>
             </RegExp>
 
             <expression noclean="1" />
