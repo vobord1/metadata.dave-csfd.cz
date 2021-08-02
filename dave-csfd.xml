@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<scraper framework="1.1" date="2021-08-01" name="dave-csfd" content="movies" thumb="icon.png" language="cs">
+<scraper framework="1,1" date="2021-08-01" name="dave-csfd" content="movies" thumb="icon.png" language="cs">
 
     <NfoUrl dest="3">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
@@ -7,8 +7,9 @@
             <expression>https?://(?:www\.)?csfd\.cz/film/(\d+-.*?)/</expression>
         </RegExp>
     </NfoUrl>
-    <CreateSearchUrl dest="2">
-        <RegExp input="$$1" output="&lt;url&gt;https://www.csfd.cz/hledat/?q=\1|$$10&lt;/url&gt;" dest="2">
+    <CreateSearchUrl clearbuffers="no" dest="2">
+        <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
+        <RegExp input="$$1" output="&lt;url cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/hledat/?q=\1|$$10&lt;/url&gt;" dest="2">
         </RegExp>
     </CreateSearchUrl>
     <!--
@@ -32,10 +33,9 @@
          </entity>
        </results>
     -->
-    <GetSearchResults dest="4">
-        <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
+    <GetSearchResults clearbuffers="no" dest="4">
         <RegExp input="$$3" output="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;results sorted=&quot;yes&quot;&gt;\1&lt;/results&gt;" dest="4">
-            <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/film/\1/galerie/plakaty/|$$10&lt;/url&gt;&lt;/entity&gt;" dest="3">
+            <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url cache=&quot;Dave-CSFD.galerie-plakaty-\1.html&quot;&gt;https://www.csfd.cz/film/\1/galerie/plakaty/&lt;/url&gt;&lt;/entity&gt;" dest="3">
                 <!--
                  <a href="/film/241061-auta-2/" class="film-title-name">Auta 2</a>
                  capture 1 = '241061-auta-2'
@@ -72,7 +72,7 @@
 
      <originaltitle> neni zatim podporovan
    -->
-    <GetDetails dest="8">
+    <GetDetails clearbuffers="no" dest="8">
         <RegExp output="user-agent=Mozilla%2F5.0%20%28Windows%20NT%206.1%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F78.0.3904.97%20Safari%2F537.36" dest="10"><expression/></RegExp>
         <RegExp input="$$6" output="&lt;details>\1&lt;/details>" dest="8">
 
